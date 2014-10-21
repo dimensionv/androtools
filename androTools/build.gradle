@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+    defaultConfig {
+        applicationId "de.dimensionv.android.androtools"
+        minSdkVersion 8
+        targetSdkVersion 20
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            debuggable false
+            jniDebugBuild false
+            renderscriptDebugBuild false
+            zipAlign true
+        }
+    }
+    dexOptions {
+        incremental true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+    productFlavors {
+    }
+}
+
+dependencies {
+    provided 'com.android.support:support-v4:20.0.0'
+    provided 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    provided 'com.android.support:support-v4:20.0.0'
+    compile project(':CommonUtilities')
+}

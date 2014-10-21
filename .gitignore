@@ -1,0 +1,20 @@
+target/
+build/
+bin/
+gen/
+.settings
+.project
+.classpath
+.gradle/
+gen-external-apklibs/
+CVS/
+
+# Files related to IntelliJ IDE
+**/*.iml
+.idea/
+workspace.xml
+tasks.xml
+atlassian-ide-plugin.xml
+
+# Files related to OS X
++**/*.DS_Store
