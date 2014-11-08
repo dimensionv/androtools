@@ -9,6 +9,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Build;
 
 import de.dimensionv.android.androtools.filetools.FileUtils;
+import de.dimensionv.android.androtools.general.ContextTools;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
 public abstract class BasePreferences {
@@ -16,12 +17,15 @@ public abstract class BasePreferences {
   protected SharedPreferences settings;
   protected Editor editor = null;
   protected static String cachePath = null;
+  protected Context context = null;
 
-  public BasePreferences(ContextWrapper context) {
+  public BasePreferences(Context context) {
     super();
-    Context ctx = context.getApplicationContext();
-    settings = ctx.getSharedPreferences(getFileName(), Context.MODE_PRIVATE);
-    cachePath = FileUtils.getApplicationCachePath(ctx);
+    this.context = ContextTools.getApplicationContext(context);
+    settings = context.getSharedPreferences(getFileName(), Context.MODE_PRIVATE);
+    if(cachePath == null) {
+      cachePath = FileUtils.getApplicationCachePath(context);
+    }
   }
 
   @SuppressLint("CommitPrefEdits")
