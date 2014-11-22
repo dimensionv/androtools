@@ -1,5 +1,5 @@
 // ////////////////////////////////////////////////////////////////////////////
-// $Id: ScreenTools.java,v 1.3 2013/12/05 21:15:13 mjoellnir Exp $
+// $Id$
 //
 // Author: Volkmar Seifert
 // Description:
