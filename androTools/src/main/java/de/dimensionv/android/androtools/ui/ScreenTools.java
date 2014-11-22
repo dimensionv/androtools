@@ -1,5 +1,4 @@
 // ////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // Author: Volkmar Seifert
 // Description:
@@ -36,18 +35,6 @@
 // those of the authors and should not be interpreted as representing official
 // policies, either expressed or implied, of Volkmar Seifert <vs@dimensionv.de>.
 // ////////////////////////////////////////////////////////////////////////////
-//
-// $Log: ScreenTools.java,v $
-// Revision 1.3  2013/12/05 21:15:13  mjoellnir
-// bug-fixes and improvements
-//
-// Revision 1.2 2013/10/12 08:27:33 mjoellnir
-// Header-comment with ID and Log-entries added
-//
-// Revision 1.1 2013/10/12 07:29:17 mjoellnir
-// Initial commit of the project into the repository
-//
-// ////////////////////////////////////////////////////////////////////////////
 package de.dimensionv.android.androtools.ui;
 
 import android.annotation.TargetApi;
@@ -60,37 +47,37 @@ import android.view.Display;
 
 /**
  * Helpful tools that retrieve information about screen-orientation, -size, etc.
- * 
- * @author mjoellnir
+ *
+ * @author Volkmar Seifert &lt;vs@DimensionV.de&gt;
+ *
  * @version 1.0
+ * @since API 1.0.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public class ScreenTools {
 
   private static DisplayMetrics metrics = null;
 
-  /**
-   * Checks if the device has a big screen
-   * 
-   * @param activityContext
-   *          The Activity Context.
-   * @return Returns true if the device has a big screen
-   * @since Class 1.0
-   * @since API 1.0
-   */
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-  public static boolean haveBigScreen(Activity activity) {
-    final int XLARGE;
-    final int DENSITY_TV;
-    final int DENSITY_XHIGH;
-    final int DENSITY_XXHIGH;
-    final int DENSITY_XXXHIGH;
+  private static final int LAYOUT_SIZE_XLARGE;
+  private static final int DENSITY_TV;
+  private static final int DENSITY_XHIGH;
+  private static final int DENSITY_XXHIGH;
+  private static final int DENSITY_XXXHIGH;
+  private static final int RESOLUTION_MINBIG_U = 480;
+  private static final int RESOLUTION_MINBIG_V = 800;
+
+  static {
+    // For compatibility with older Android systems, use self-made constants.
+    // They are initialized once using either what the system provides us with, if supported,
+    // or uses literals that actually equate to the real system values of newer systems.
+    // This ensures that the routines works and behave the same on all systems.
 
     if(Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) {
-      XLARGE = Configuration.SCREENLAYOUT_SIZE_XLARGE;
+      LAYOUT_SIZE_XLARGE = Configuration.SCREENLAYOUT_SIZE_XLARGE;
       DENSITY_XHIGH = DisplayMetrics.DENSITY_XHIGH;
     } else {
       // for compatibility with API levels < 9
-      XLARGE = 4;
+      LAYOUT_SIZE_XLARGE = 4;
       DENSITY_XHIGH = 320;
     }
 
@@ -111,37 +98,61 @@ public class ScreenTools {
     } else {
       DENSITY_XXXHIGH = 640;
     }
+  }
 
-    // Verifies if the generalized size of the device is LARGE or XLARGE
+  /**
+   * <p>Checks if the device has a big screen using the currently shown {@code Activity} for
+   * accessing window manager in order to retrieve the device's {@code DisplayMetrics}.</p>
+   * <p/>
+   * <p>The decision whether is screen size is "big" or not depends on a couple of things. First of
+   * all, it is checked whether {@code Configuration.screenLayout} is set to eiter large or
+   * extra-large. Depending on this check, on of the following two things are checked:</p>
+   * <ol><li>If large or xlarge: it's a matter of DPI whether it really is a big screen or not.</li>
+   * <li>If not large and not xlarge: check whether the screen-size in pixels is greater than
+   * 480x800 and 800x480.</li></ol> <p>If this evaluates to {@code true}, the screen is a big
+   * one.</p>
+   *
+   * @param activity
+   *     The currently shown activity.
+   *
+   * @return Returns true if the device has a big screen, false otherwise.
+   *
+   * @since Class 1.0
+   * @since API 1.0.0
+   */
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+  public static boolean haveBigScreen(Activity activity) {
+    // Verifies if the generalized size of the device is LARGE or LAYOUT_SIZE_XLARGE
     Configuration config = activity.getResources().getConfiguration();
 
     int screenLayout = (config.screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
-    boolean xlarge = (screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
-        || (screenLayout == XLARGE);
+    boolean xlarge = (screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE) || (screenLayout == LAYOUT_SIZE_XLARGE);
 
-    DisplayMetrics metrics = ScreenTools.getDisplayMetrics(activity);
+    DisplayMetrics metrics = getDisplayMetrics(activity);
 
     if(xlarge) {
-      // If XLarge, checks if the Generalized Density is at least MDPI
+      // If XLarge, checks if the generalized density is at least MDPI
       // (160dpi)
-
-      // MDPI=160, DEFAULT=160, DENSITY_HIGH=240, DENSITY_MEDIUM=160,
-      // DENSITY_TV=213, DENSITY_XHIGH=320, DENSITY_XXHIGH=480,
-      // DENSITY_XXXHIGH=640
-      return ((metrics.densityDpi == DisplayMetrics.DENSITY_DEFAULT)
-          || (metrics.densityDpi == DisplayMetrics.DENSITY_HIGH)
-          || (metrics.densityDpi == DisplayMetrics.DENSITY_MEDIUM)
-          || (metrics.densityDpi == DENSITY_TV)
-          || (metrics.densityDpi == DENSITY_XHIGH)
-          || (metrics.densityDpi == DENSITY_XXHIGH)
-          || (metrics.densityDpi == DENSITY_XXXHIGH));
-
+      return (metrics.densityDpi >= DisplayMetrics.DENSITY_MEDIUM);
     } else {
-      return ((metrics.widthPixels > 480) && (metrics.heightPixels > 800))
-          || ((metrics.widthPixels > 800) && (metrics.heightPixels > 480));
+      boolean portrait = (metrics.widthPixels > RESOLUTION_MINBIG_U) && (metrics.heightPixels > RESOLUTION_MINBIG_V);
+      boolean landscape = (metrics.widthPixels > RESOLUTION_MINBIG_V) && (metrics.heightPixels > RESOLUTION_MINBIG_U);
+      return portrait || landscape;
     }
   }
 
+  /**
+   * Returns the display metrics of the device, using the currently shown {@code Activity} for
+   * accessing the window manager.
+   *
+   * @param activity
+   *     The currently shown {@code Activity}.
+   *
+   * @return the {@code DisplayMetrics} of the device.
+   *
+   * @since Class 1.0
+   * @since API 1.0.0
+   */
   public static DisplayMetrics getDisplayMetrics(Activity activity) {
     if(ScreenTools.metrics == null) {
       ScreenTools.metrics = new DisplayMetrics();
@@ -152,24 +163,24 @@ public class ScreenTools {
 
   /**
    * Returns the current orientation of the device.
-   * 
+   *
    * @param activity
-   *          The currently shown activity
-   * @return ORIENTATION_PORTRAIT if it's portrait-oriented,
-   *         Configuration.ORIENTATION_LANDSCAPE if it's landscape or
-   *         Configuration.ORIENTATION_SQUARE if the orientation has equal width
-   *         and height, and the device has a recent enough operating-system.
+   *     The currently shown activity
+   *
+   * @return ORIENTATION_PORTRAIT if it's portrait-oriented, Configuration.ORIENTATION_LANDSCAPE if
+   * it's landscape or Configuration.ORIENTATION_SQUARE if the orientation has equal width and
+   * height, and the device has a recent enough operating-system.
+   *
    * @since Class 1.0
-   * @since API 1.0
+   * @since API 1.0.0
    */
   @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
   @SuppressWarnings("deprecation")
-  public static int getScreenOrientation(Activity activity)
-  {
+  public static int getScreenOrientation(Activity activity) {
     Display display = activity.getWindowManager().getDefaultDisplay();
     Configuration config = activity.getResources().getConfiguration();
 
-    int orientation = Configuration.ORIENTATION_UNDEFINED;
+    int orientation;
     if(Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
       // until Froyo, Display.getOrientation() was a proper method to determine
       // the current orientation...
@@ -226,27 +237,31 @@ public class ScreenTools {
 
   /**
    * Convenience method to quickly identify landscape-orientation
-   * 
+   *
    * @param activity
-   *          The currently shown activity
+   *     The currently shown activity
+   *
    * @return true if orientation is landscape, false otherwise
+   *
    * @since Class 1.0
-   * @since API 1.0
+   * @since API 1.0.0
    */
   public static boolean orientationIsLandscape(Activity activity) {
-    return ScreenTools.getScreenOrientation(activity) == Configuration.ORIENTATION_LANDSCAPE;
+    return getScreenOrientation(activity) == Configuration.ORIENTATION_LANDSCAPE;
   }
 
   /**
    * Convenience method to quickly identify portrait-orientation
-   * 
+   *
    * @param activity
-   *          The currently shown activity
+   *     The currently shown activity
+   *
    * @return true if orientation is portrait, false otherwise
+   *
    * @since Class 1.0
-   * @since API 1.0
+   * @since API 1.0.0
    */
   public static boolean orientationIsPortrait(Activity activity) {
-    return ScreenTools.getScreenOrientation(activity) == Configuration.ORIENTATION_PORTRAIT;
+    return getScreenOrientation(activity) == Configuration.ORIENTATION_PORTRAIT;
   }
 }

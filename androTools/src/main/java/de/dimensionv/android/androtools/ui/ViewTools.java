@@ -1,5 +1,4 @@
 // ////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // Author: Volkmar Seifert
 // Description:
@@ -36,10 +35,6 @@
 // those of the authors and should not be interpreted as representing official
 // policies, either expressed or implied, of Volkmar Seifert <vs@dimensionv.de>.
 // ////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-//
-// ////////////////////////////////////////////////////////////////////////////
 package de.dimensionv.android.androtools.ui;
 
 import android.app.Activity;
@@ -49,22 +44,77 @@ import android.view.View;
 /**
  * Helpful tools for handling views.
  *
- * @author mjoellnir
+ * @author Volkmar Seifert &lt;vs@DimensionV.de&gt;
+ *
  * @version 1.0
- * @since 2.1
+ * @since API 1.0.0
  */
 public class ViewTools {
 
+  /**
+   * <p>Returns the {@code View} object with the given {@code id} from the
+   * {@code View} object provided by {@code parent}.</p>
+   * <p>This method is a convenience-method to keep the actual code from being overly cluttered
+   * with castings, as casting into the actual {@code View} object is done via Templates.</p>
+   *
+   * @param parent
+   *     The parent {@code View} object containing the requested child {@code View}
+   *     object.
+   * @param id
+   *     The resource-ID of the requested child {@code View} object.
+   * @param <T>
+   *     This is the left-hand side of the assignent, and can be any class extending
+   *     {@code View}.
+   *
+   * @return The appropriately cast {@code View} object requested by the given {@code id}
+   * or null if it could not be found within the parent {@code View} object.
+   */
   @SuppressWarnings("unchecked")
   public static final <T extends View> T findView(View parent, int id) {
     return (T) parent.findViewById(id);
   }
 
+  /**
+   * <p>Returns the {@code View} object with the given {@code id} from the
+   * {@code Activity} object provided by {@code parent}.</p>
+   * <p>This method is a convenience-method to keep the actual code from being overly cluttered
+   * with castings, as casting into the actual {@code View} object is done via Templates.</p>
+   *
+   * @param parent
+   *     The {@code Activity} object containing the requested child {@code View}
+   *     object.
+   * @param id
+   *     The resource-ID of the requested child {@code View} object.
+   * @param <T>
+   *     This is the left-hand side of the assignent, and can be any class extending
+   *     {@code View}.
+   *
+   * @return The appropriately cast {@code View} object requested by the given {@code id}
+   * or null if it could not be found within the {@code Activity} object.
+   */
   @SuppressWarnings("unchecked")
   public static final <T extends View> T findView(Activity parent, int id) {
     return (T) parent.findViewById(id);
   }
 
+  /**
+   * <p>Returns the {@code View} object with the given {@code id} from the
+   * {@code Dialog} object provided by {@code parent}.</p>
+   * <p>This method is a convenience-method to keep the actual code from being overly cluttered
+   * with castings, as casting into the actual {@code View} object is done via Templates.</p>
+   *
+   * @param parent
+   *     The {@code Dialog} object containing the requested child {@code View}
+   *     object.
+   * @param id
+   *     The resource-ID of the requested child {@code View} object.
+   * @param <T>
+   *     This is the left-hand side of the assignent, and can be any class extending
+   *     {@code View}.
+   *
+   * @return The appropriately cast {@code View} object requested by the given {@code id}
+   * or null if it could not be found within the {@code Dialog} object.
+   */
   @SuppressWarnings("unchecked")
   public static final <T extends View> T findView(Dialog parent, int id) {
     return (T) parent.findViewById(id);

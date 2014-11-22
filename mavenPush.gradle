@@ -1,0 +1,150 @@
+// Gradle utility scripts
+//
+// Script:          mavenPush
+//
+// Description:
+//
+// Gradle-script containing all the magic necessary to perform building, packaging, signing and
+// uploading, in order to publish a library on maven central
+//
+// This script is based upon several blog-posts and posts in forums and questions on stackoverflow,
+// actually too many to list all. It's the culmination of all findings while I was trying to figure
+// out how the publishing and signing stuff might actually work, if you have a multi-flavored
+// project. Because most posts were only dealing with a simple, single-flavor library, and very
+// often the solutions presented were using hardcoded references to project specifica. Since I was
+// trying to create a universal solution that in addition would not expose security credentials,
+// I had to solve way trickier problems.
+//
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+def File versionPropsFile = file('version.properties')
+def Properties versionProps = new Properties()
+
+def File credentialsPropsFile = file(project.rootDir.absolutePath + File.separator + 'credentials.properties')
+def Properties credentialProps = new Properties()
+
+if(!(credentialsPropsFile.canRead() && versionPropsFile.canRead())) {
+  throw new GradleException("Could not read property files! \n"
+      + credentialsPropsFile.getAbsoluteFile() + "\n"
+      + versionPropsFile.getAbsoluteFile())
+}
+
+versionProps.load(new FileInputStream(versionPropsFile))
+
+def majorVersionCode = versionProps['MAJOR'].toInteger()
+def minorVersionCode = versionProps['MINOR'].toInteger()
+def hotfixVersionCode = versionProps['HOTFIX'].toInteger()
+def buildNr = versionProps['BUILD_NUMBER'].toInteger()
+ext.snapshotBuild = versionProps['SNAPSHOT_BUILD'].toBoolean()
+def versionString = String.format("%d.%d.%d", majorVersionCode, minorVersionCode, hotfixVersionCode)
+
+if(ext.snapshotBuild) {
+  versionString += '-SNAPSHOT'
+}
+
+def isReleaseBuild() {
+  return !snapshotBuild
+}
+
+def getReleaseRepositoryUrl() {
+  return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+                                               : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+}
+
+def getSnapshotRepositoryUrl() {
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+                                                : "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+afterEvaluate { project ->
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        credentialProps.load(new FileInputStream(credentialsPropsFile))
+        repository(url: getReleaseRepositoryUrl()) {
+          authentication(userName: credentialProps['NEXUS_USER'], password: credentialProps['NEXUS_PASSWORD'])
+        }
+        snapshotRepository(url: getSnapshotRepositoryUrl()) {
+          authentication(userName: credentialProps['NEXUS_USER'], password: credentialProps['NEXUS_PASSWORD'])
+        }
+
+        pom.groupId = POM_GROUP_ID
+        pom.artifactId = POM_ARTIFACT_ID
+        pom.version = versionString
+
+        pom.project {
+          name POM_NAME
+          packaging POM_PACKAGING
+          description POM_DESCRIPTION
+          url POM_URL
+
+          scm {
+            url POM_SCM_URL
+            connection POM_SCM_CONNECTION
+            developerConnection POM_SCM_DEV_CONNECTION
+          }
+
+          licenses {
+            license {
+              name POM_LICENCE_NAME
+              url POM_LICENCE_URL
+              distribution POM_LICENCE_DIST
+            }
+          }
+
+          developers {
+            developer {
+              id POM_DEVELOPER_ID
+              name POM_DEVELOPER_NAME
+            }
+          }
+        }
+      }
+    }
+  }
+
+  signing {
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+
+    credentialProps.load(new FileInputStream(credentialsPropsFile))
+    allprojects {
+      ext.'signing.secretKeyRingFile' = credentialProps['SIGNING_SECRET_KEY_RING_FILE']
+      ext.'signing.keyId' = credentialProps['SIGNING_KEY_ID']
+      ext.'signing.password' = credentialProps['SIGNING_PASSWORD']
+    }
+
+    sign configurations.archives
+  }
+
+  task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+    destinationDir = file(project.buildDir.absolutePath + File.separator + 'javadoc')
+
+    options.links("http://docs.oracle.com/javase/7/docs/api/");
+    options.links("http://developer.android.com/reference/");
+
+    failOnError false
+  }
+
+  task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+  }
+
+  task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+  }
+
+  artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+  }
+}

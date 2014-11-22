@@ -1,37 +1,86 @@
 apply plugin: 'com.android.library'
 
+def versionPropsFile = file('version.properties')
+
+def majorVersionCode = 0
+def minorVersionCode = 0
+def hotfixVersionCode = 0
+def buildNr = 1
+def snapshotBuild = true;
+def versionString
+
+def Properties versionProps = new Properties()
+
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
-    defaultConfig {
-        applicationId "de.dimensionv.android.androtools"
-        minSdkVersion 8
-        targetSdkVersion 20
+
+  if(versionPropsFile.canRead()) {
+    versionProps.load(new FileInputStream(versionPropsFile))
+
+    majorVersionCode = versionProps['MAJOR'].toInteger()
+    minorVersionCode = versionProps['MINOR'].toInteger()
+    hotfixVersionCode = versionProps['HOTFIX'].toInteger()
+
+    buildNr = versionProps['BUILD_NUMBER'].toInteger() + 1
+
+    snapshotBuild = versionProps['SNAPSHOT_BUILD'].toBoolean()
+
+    versionProps['BUILD_NUMBER'] = buildNr.toString()
+  } else {
+    versionProps['MAJOR'] = majorVersionCode.toString()
+    versionProps['MINOR'] = minorVersionCode.toString()
+    versionProps['HOTFIX'] = minorVersionCode.toString()
+    versionProps['BUILD_NUMBER'] = buildNr.toString()
+    versionProps['SNAPSHOT_BUILD'] = snapshotBuild.toString()
+  }
+
+  versionProps.store(versionPropsFile.newWriter(), null)
+
+  versionString = String.format("%d.%d.%d", majorVersionCode, minorVersionCode, hotfixVersionCode)
+
+  allprojects {
+    version = versionString
+    ext.snapshotBuild = snapshotBuild
+  }
+
+  compileSdkVersion ANDROID_BUILD_SDK_VERSION.toInteger()
+  buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+
+  //publishNonDefault true
+
+  defaultConfig {
+    versionCode buildNr
+    versionName versionString
+    minSdkVersion 8
+    targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION.toInteger()
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+      debuggable false
+      jniDebuggable false
+      renderscriptDebuggable false
+      zipAlignEnabled true
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-            debuggable false
-            jniDebugBuild false
-            renderscriptDebugBuild false
-            zipAlign true
-        }
+    debug {
+      minifyEnabled false
+      debuggable true
+      versionNameSuffix '-SNAPSHOT'
+      zipAlignEnabled true
     }
-    dexOptions {
-        incremental true
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
-    }
-    productFlavors {
-    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_6
+    targetCompatibility JavaVersion.VERSION_1_6
+  }
 }
 
 dependencies {
-    provided 'com.android.support:support-v4:20.0.0'
-    provided 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
-    provided 'com.android.support:support-v4:20.0.0'
-    compile project(':CommonUtilities')
+  compile 'de.dimensionv:commonutilities:1.4.0'
+  //noinspection GradleCompatible
+  compile 'com.android.support:support-v4:20.0.0'
+  compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
 }
+
+apply from: '../mavenPush.gradle'
