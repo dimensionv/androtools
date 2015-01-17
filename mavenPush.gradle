@@ -123,12 +123,29 @@ afterEvaluate { project ->
 
   task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
+    // add all dependencies to the classpath...
+    // This still doesn't fix the support-library and actionbar-sherlock issues during javadoc
+    // creation, because the javadoc-compiler doesn't know how to handle aar files.
+    configurations.compile.allDependencies.each {
+      def depFiles = configurations.compile.files(it)
+      depFiles.each {
+        classpath += project.files(it)
+      }
+    }
+
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+    //println("Classpath:\n\t" + classpath.join("\n\t") + "\n-----------")
 
     destinationDir = file(project.buildDir.absolutePath + File.separator + 'javadoc')
 
-    options.links("http://docs.oracle.com/javase/7/docs/api/");
-    options.links("http://developer.android.com/reference/");
+    options {
+      links("http://docs.oracle.com/javase/7/docs/api/");
+      links("http://javadoc.dimensionv.de/commonutilities/");
+      linksOffline("http://d.android.com/reference", "${android.sdkDirectory}/docs/reference");
+    }
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
 
     failOnError false
   }

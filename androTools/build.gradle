@@ -79,7 +79,7 @@ android {
 dependencies {
   compile 'de.dimensionv:commonutilities:1.4.0'
   //noinspection GradleCompatible
-  compile 'com.android.support:support-v4:20.0.0'
+  compile 'com.android.support:support-v4:21.0.3'
   compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
 }
 
