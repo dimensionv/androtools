@@ -44,8 +44,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.actionbarsherlock.app.SherlockFragment;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,16 +54,12 @@ import java.util.Map;
  * result-codes from the activities to the appropriate fragment, which initially started the
  * {@code Activity}.</p>
  *
- * <p>Please note that this class extends SherlockFragment, not Fragment directly. In the Future,
- * this may change to the actionbar classes from the support library, as that is the now recommended
- * way of bringing ActionBar support to older Android systems.</p>
- *
  * @author Volkmar Seifert &lt;vs@DimensionV.de&gt;
  *
  * @version 1.0
  * @since API 1.0.0
  */
-public class BaseFragment extends SherlockFragment {
+public class BaseFragment extends Fragment {
 
   private HashMap<Integer, Fragment> requestCodes = null;
 
