@@ -64,8 +64,7 @@ public class BaseFragment extends Fragment {
   private HashMap<Integer, Fragment> requestCodes = null;
 
   /**
-   * Registers request code (used in
-   * {@link #startActivityForResult(Intent, int)}).
+   * Registers request code (used in {@link #startActivityForResult(Intent, int)}).
    * 
    * @param requestCode
    *          the request code.

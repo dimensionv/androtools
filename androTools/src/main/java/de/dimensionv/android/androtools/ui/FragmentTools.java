@@ -150,4 +150,43 @@ public class FragmentTools {
     ft.commit();
     return fragment;
   }
+
+  /**
+   * Removes the {@link Fragment} specified by the {@code tag} from view.
+   *
+   * @param fragmentManager
+   *          The FragmentManager that shall be used to receive and manage the
+   *          fragment.
+   * @param tag
+   *          The tag that was assigned to the fragment when it was attaching to the
+   *          parent.
+   * @throws InstantiationException
+   * @throws IllegalAccessException
+   *
+   * @since Class 2.0
+   * @since API 1.1.0
+   */
+  public static void removeFragment(FragmentManager fragmentManager, String tag) throws InstantiationException, IllegalAccessException {
+    removeFragment(fragmentManager, fragmentManager.findFragmentByTag(tag));
+  }
+
+  /**
+   * Removes the specified {@link Fragment} from view.
+   *
+   * @param fragmentManager
+   *          The FragmentManager that shall be used to receive and manage the
+   *          fragment.
+   * @param fragment
+   *          The {@code Fragment} to be removed.
+   * @throws InstantiationException
+   * @throws IllegalAccessException
+   *
+   * @since Class 2.0
+   * @since API 1.1.0
+   */
+  public static void removeFragment(FragmentManager fragmentManager, Fragment fragment) throws InstantiationException, IllegalAccessException {
+    FragmentTransaction ft = fragmentManager.beginTransaction();
+    ft.remove(fragment);
+    ft.commit();
+  }
 }

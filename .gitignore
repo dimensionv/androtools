@@ -7,7 +7,7 @@ CVS/
 # Android generated
 bin
 gen
-gen*
+#gen*
 
 # Eclipse
 .project
