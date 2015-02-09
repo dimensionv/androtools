@@ -35,7 +35,7 @@
 // those of the authors and should not be interpreted as representing official
 // policies, either expressed or implied, of Volkmar Seifert <vs@dimensionv.de>.
 // ////////////////////////////////////////////////////////////////////////////
-package de.dimensionv.android.androtools;
+package de.dimensionv.android.androtools.preferences;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -54,6 +54,7 @@ import de.dimensionv.android.androtools.filetools.FileTools;
 import de.dimensionv.android.androtools.general.ContextTools;
 import de.dimensionv.android.androtools.general.Initializer;
 import de.dimensionv.android.androtools.general.MemoryTrimmer;
+import de.dimensionv.android.androtools.general.TrimState;
 import de.dimensionv.java.libraries.common.utilities.strings.StringUtils;
 
 /**
@@ -125,7 +126,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * @since Class 1.0
    * @since API 1.0.0
    */
-  private boolean initialized = false;
+  private TrimState trimState = TrimState.NONE;
 
   /**
    * Creates and initializes {@link BasePreferences} object with the given {@link Context}.
@@ -140,7 +141,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * @since API 1.0.0
    */
   public BasePreferences(Context context) {
-    initialize(context, getFileName());
+    initialize(context, getFileName(), trimState);
   }
 
   /**
@@ -155,7 +156,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * @since API 1.0.0
    */
   public BasePreferences(Context context, String fileName) {
-    initialize(context, fileName);
+    initialize(context, fileName, trimState);
   }
 
   /**
@@ -167,18 +168,26 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *     The application context
    * @param fileName
    *     The name of the preference file.
+   * @param trimState
+   *     The current {@TrimState} of the app, which should be the same {@code TrimState} of all
+   *     {@code Initializer}s.
    *
+   * @param trimState
    * @since Class 1.0
    * @since API 1.0.0
    */
-  private void initialize(Context context, String fileName) {
-    if(!initialized) {
+  private void initialize(Context context, String fileName, TrimState trimState) {
+    if(this.trimState != trimState) {
+      throw new IllegalStateException("TrimStates don't match!");
+    }
+
+    if(trimState != TrimState.INITIALIZED) {
       this.context = ContextTools.getApplicationContext(context);
       settings = this.context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
       if(cachePath == null) {
         cachePath = FileTools.getApplicationCachePath(this.context);
       }
-      initialized = true;
+      this.trimState = TrimState.INITIALIZED;
     }
   }
 
@@ -285,19 +294,20 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
       commit();
     }
 
-    initialized = false;
+    trimState = TrimState.TRIMMED;
   }
 
   @Override
   public void onForceTrim() {
-    if(initialized) {
+    if(trimState == TrimState.INITIALIZED) {
       onTrim(); // only trim, if not already trimmed.
     }
+    trimState = TrimState.FORCE_TRIMMED;
   }
 
   @Override
-  public void onInitialize(Context context) {
-    initialize(context, getFileName());
+  public void onInitialize(Context context, TrimState trimState) {
+    initialize(context, getFileName(), trimState);
   }
 
   @Override

@@ -54,6 +54,11 @@ import android.view.Display;
  * @since API 1.0.0
  */
 @SuppressWarnings("UnusedDeclaration")
+// The following annotation is bullshit. it is just to suppress 5 warnings which lint shows because
+// it doesn't have the intelligence to see that the code deals with it the right way...fuck you lint!
+// The warning are from the constants in the static initializer block. If anyone knows how to deal
+// with it other than hitting the whole class with this annotation below, please send me a patch...
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class ScreenTools {
 
   private static DisplayMetrics metrics = null;
