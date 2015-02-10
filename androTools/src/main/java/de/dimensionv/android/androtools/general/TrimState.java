@@ -11,9 +11,9 @@ import de.dimensionv.java.libraries.common.exceptions.InvalidEnumValueException;
  */
 public enum TrimState {
   NONE,
-  INITIALIZED,
+  FORCE_TRIMMED,
   TRIMMED,
-  FORCE_TRIMMED;
+  INITIALIZED;
 
   private static TrimState[] VALUES = values();
 

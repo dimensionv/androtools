@@ -177,18 +177,22 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * @since API 1.0.0
    */
   private void initialize(Context context, String fileName, TrimState trimState) {
+    if(this.trimState == TrimState.INITIALIZED) {
+      return;
+    }
+
+    // not initialized, so check if sync states are in sync...
     if(this.trimState != trimState) {
       throw new IllegalStateException("TrimStates don't match!");
     }
 
-    if(trimState != TrimState.INITIALIZED) {
-      this.context = ContextTools.getApplicationContext(context);
-      settings = this.context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
-      if(cachePath == null) {
-        cachePath = FileTools.getApplicationCachePath(this.context);
-      }
-      this.trimState = TrimState.INITIALIZED;
+    this.context = ContextTools.getApplicationContext(context);
+    settings = this.context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+    if(cachePath == null) {
+      cachePath = FileTools.getApplicationCachePath(this.context);
     }
+
+    this.trimState = TrimState.INITIALIZED;
   }
 
   /**
