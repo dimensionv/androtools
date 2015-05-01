@@ -24,8 +24,7 @@ public interface MemoryTrimmer {
    * Though this is not mandatory, and this method can be run at any level, it is recommended
    * to have this method run at a lower level than the {@link MemoryTrimmer#onForceTrim()} method.</p>
    *
-   * @since Interface 1.0
-   * @since API 1.0.0
+   * @since Interface 1.0, API 1.0.0
    */
   void onTrim();
 
@@ -38,8 +37,7 @@ public interface MemoryTrimmer {
    * {@link Application.ActivityLifecycleCallbacks#onTrimMemory(int)} with the
    * {@link Application.ActivityLifecycleCallbacks#TRIM_MEMORY_COMPLETE} level.</p>
    *
-   * @since Interface 1.0
-   * @since API 1.0.0
+   * @since Interface 1.0, API 1.0.0
    */
   void onForceTrim();
 }

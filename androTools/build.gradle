@@ -50,7 +50,7 @@ android {
   defaultConfig {
     versionCode buildNr
     versionName versionString
-    minSdkVersion 8
+    minSdkVersion ANDROID_MIN_SDK_VERION.toInteger()
     targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION.toInteger()
   }
 
@@ -78,7 +78,6 @@ android {
 
 dependencies {
   compile 'de.dimensionv:commonutilities:1.4.0'
-  compile 'com.android.support:support-v4:21.0.3'
 }
 
 apply from: '../mavenPush.gradle'

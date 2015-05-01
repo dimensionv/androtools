@@ -74,7 +74,7 @@ import de.dimensionv.java.libraries.common.utilities.strings.StringUtils;
  * will silently make a transition to the new native routines.</p>
  *
  * @author Volkmar Seifert &lt;vs@DimensionV.de&gt;
- * @version 1.0
+ * @version 2.0
  * @since API 1.0.0
  */
 @SuppressWarnings("UnusedDeclaration")
@@ -84,7 +84,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
   /**
    * The actual {@link SharedPreferences} object that is used internally.
    *
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   protected SharedPreferences settings;
   /**
@@ -92,8 +92,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * needs to be aquired through {@link BasePreferences#getEditor()}, and will be released by
    * calling {@link BasePreferences#apply()} or {@link BasePreferences#commit()}.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   protected Editor editor = null;
   /**
@@ -101,30 +100,26 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *
    * @see BasePreferences#getCachePath()
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   protected static String cachePath = null;
   /**
    * The application context
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   protected Context context = null;
   /**
    * Cache for the hashed keys, to speed up key-hashing.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private HashMap<String, String> keyMap = null;
   /**
    * Flag that indicates whether initialization is complete ({@code true}) or pending ({@code
    * false}).
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private TrimState trimState = TrimState.NONE;
 
@@ -137,8 +132,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * @param context
    *     The application context
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public BasePreferences(Context context) {
     initialize(context, getFileName(), trimState);
@@ -152,8 +146,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    * @param fileName
    *     The name of the preference file.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public BasePreferences(Context context, String fileName) {
     initialize(context, fileName, trimState);
@@ -173,8 +166,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *     {@code Initializer}s.
    *
    * @param trimState
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private void initialize(Context context, String fileName, TrimState trimState) {
     if(this.trimState == TrimState.INITIALIZED) {
@@ -200,8 +192,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *
    * @return the aquired {@code Editor}-object.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   @SuppressLint("CommitPrefEdits")
   private Editor getEditor() {
@@ -216,8 +207,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *
    * @return the cachePath
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static String getCachePath() {
     return BasePreferences.cachePath;
@@ -229,8 +219,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *
    * @return The filename
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public abstract String getFileName();
 
@@ -246,8 +235,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *
    * @return The hash-value as a hexadecimal {@link String}.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   protected String getHash(String value) {
     if(!getKeyMap().containsKey(value)) {
@@ -271,8 +259,7 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
    *
    * @return The keyMap cache
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   protected HashMap<String, String> getKeyMap() {
     if(keyMap == null) {
@@ -282,6 +269,9 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
     return keyMap;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void onTrim() {
     if(keyMap != null) {
@@ -301,6 +291,9 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
     trimState = TrimState.TRIMMED;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void onForceTrim() {
     if(trimState == TrimState.INITIALIZED) {
@@ -309,35 +302,39 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
     trimState = TrimState.FORCE_TRIMMED;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void onInitialize(Context context, TrimState trimState) {
     initialize(context, getFileName(), trimState);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Map<String, ?> getAll() {
     return settings.getAll();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public String getString(String key, String defValue) {
     return settings.getString(getHash(key), defValue);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   public Set<String> getStringSet(String key, Set<String> defValues) {
     Set<String> values;
-    TextUtils.StringSplitter splitter = null;
     String list = settings.getString(getHash(key), null);
-    if((list != null)) {
-      int len = list.length();
-      int lastIndex = len - 1;
-      if((list.charAt(0) == '[') && (list.charAt(lastIndex) == ']')) {
-        splitter = new TextUtils.SimpleStringSplitter(',');
-        splitter.setString(list.substring(1, lastIndex));
-      }
-    }
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
     if(((Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) && (splitter != null)) || (splitter != null)) {
       values = new HashSet<String>(StringUtils.countOccurrences(list, ',') + 1);
       for(String value : splitter) {
@@ -357,58 +354,316 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
     return values;
   }
 
+  /**
+   * Retrieves a {@code byte}-array from the preferences.
+   *
+   * @param key The name of the preference to retrieve.
+   * @param defValues Values to return if this preference does not exist.
+   *
+   * @return Returns the preference values if they exist, or defValues.
+   */
+  public byte[] getByteArray(String key, byte[] defValues) {
+    byte[] values;
+    String list = settings.getString(getHash(key), null);
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
+    if(splitter != null) {
+      values = new byte[StringUtils.countOccurrences(list, ',') + 1];
+      int pos = 0;
+      for(String value : splitter) {
+        // filter out a leading space, if there is one...
+        values[pos++] = Byte.parseByte(value.trim());
+      }
+      // just because the splitter is not null doesn't mean it really contains the separator-char
+      // and therefore useful items.
+      if(pos == 0) {
+        if((defValues != null) && (defValues.length > 0)) {
+          values = defValues.clone();
+        } else {
+          values = defValues;
+        }
+      }
+    } else {
+      if((defValues != null) && (defValues.length > 0)) {
+        values = defValues.clone();
+      } else {
+        values = defValues;
+      }
+    }
+    return values;
+  }
+
+  /**
+   * Retrieves a {@code int}-array from the preferences.
+   *
+   * @param key The name of the preference to retrieve.
+   * @param defValues Values to return if this preference does not exist.
+   *
+   * @return Returns the preference values if they exist, or defValues.
+   */
+  public int[] getIntArray(String key, int[] defValues) {
+    int[] values;
+    String list = settings.getString(getHash(key), null);
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
+    if(splitter != null) {
+      values = new int[StringUtils.countOccurrences(list, ',') + 1];
+      int pos = 0;
+      for(String value : splitter) {
+        // filter out a leading space, if there is one...
+        values[pos++] = Integer.parseInt(value.trim());
+      }
+      // just because the splitter is not null doesn't mean it really contains the separator-char
+      // and therefore useful items.
+      if(pos == 0) {
+        if((defValues != null) && (defValues.length > 0)) {
+          values = defValues.clone();
+        } else {
+          values = defValues;
+        }
+      }
+    } else {
+      if((defValues != null) && (defValues.length > 0)) {
+        values = defValues.clone();
+      } else {
+        values = defValues;
+      }
+    }
+    return values;
+  }
+
+  /**
+   * Retrieves a {@code long}-array from the preferences.
+   *
+   * @param key The name of the preference to retrieve.
+   * @param defValues Values to return if this preference does not exist.
+   *
+   * @return Returns the preference values if they exist, or defValues.
+   */
+  public long[] getLongArray(String key, long[] defValues) {
+    long[] values;
+    String list = settings.getString(getHash(key), null);
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
+    if(splitter != null) {
+      values = new long[StringUtils.countOccurrences(list, ',') + 1];
+      int pos = 0;
+      for(String value : splitter) {
+        // filter out a leading space, if there is one...
+        values[pos++] = Long.parseLong(value.trim());
+      }
+      // just because the splitter is not null doesn't mean it really contains the separator-char
+      // and therefore useful items.
+      if(pos == 0) {
+        if((defValues != null) && (defValues.length > 0)) {
+          values = defValues.clone();
+        } else {
+          values = defValues;
+        }
+      }
+    } else {
+      if((defValues != null) && (defValues.length > 0)) {
+        values = defValues.clone();
+      } else {
+        values = defValues;
+      }
+    }
+    return values;
+  }
+
+  /**
+   * Retrieves a {@code float}-array from the preferences.
+   *
+   * @param key The name of the preference to retrieve.
+   * @param defValues Values to return if this preference does not exist.
+   *
+   * @return Returns the preference values if they exist, or defValues.
+   */
+  public float[] getFloatArray(String key, float[] defValues) {
+    float[] values;
+    String list = settings.getString(getHash(key), null);
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
+    if(splitter != null) {
+      values = new float[StringUtils.countOccurrences(list, ',') + 1];
+      int pos = 0;
+      for(String value : splitter) {
+        // filter out a leading space, if there is one...
+        values[pos++] = Float.parseFloat(value.trim());
+      }
+      // just because the splitter is not null doesn't mean it really contains the separator-char
+      // and therefore useful items.
+      if(pos == 0) {
+        if((defValues != null) && (defValues.length > 0)) {
+          values = defValues.clone();
+        } else {
+          values = defValues;
+        }
+      }
+    } else {
+      if((defValues != null) && (defValues.length > 0)) {
+        values = defValues.clone();
+      } else {
+        values = defValues;
+      }
+    }
+    return values;
+  }
+
+  /**
+   * Retrieves a {@code double}-array from the preferences.
+   *
+   * @param key The name of the preference to retrieve.
+   * @param defValues Values to return if this preference does not exist.
+   *
+   * @return Returns the preference values if they exist, or defValues.
+   */
+  public double[] getDoubleArray(String key, double[] defValues) {
+    double[] values;
+    String list = settings.getString(getHash(key), null);
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
+    if(splitter != null) {
+      values = new double[StringUtils.countOccurrences(list, ',') + 1];
+      int pos = 0;
+      for(String value : splitter) {
+        // filter out a leading space, if there is one...
+        values[pos++] = Double.parseDouble(value.trim());
+      }
+      // just because the splitter is not null doesn't mean it really contains the separator-char
+      // and therefore useful items.
+      if(pos == 0) {
+        if((defValues != null) && (defValues.length > 0)) {
+          values = defValues.clone();
+        } else {
+          values = defValues;
+        }
+      }
+    } else {
+      if((defValues != null) && (defValues.length > 0)) {
+        values = defValues.clone();
+      } else {
+        values = defValues;
+      }
+    }
+    return values;
+  }
+
+  /**
+   * Retrieves a {@code char}-array from the preferences.
+   *
+   * @param key The name of the preference to retrieve.
+   * @param defValues Values to return if this preference does not exist.
+   *
+   * @return Returns the preference values if they exist, or defValues.
+   */
+  public char[] getCharArray(String key, char[] defValues) {
+    char[] values;
+    String list = settings.getString(getHash(key), null);
+    TextUtils.StringSplitter splitter = getStringsSplitter(list);
+    if(splitter != null) {
+      values = new char[StringUtils.countOccurrences(list, ',') + 1];
+      int pos = 0;
+      for(String value : splitter) {
+        // filter out a leading space, if there is one...
+        values[pos++] = value.trim().charAt(0);
+      }
+      // just because the splitter is not null doesn't mean it really contains the separator-char
+      // and therefore useful items.
+      if(pos == 0) {
+        if((defValues != null) && (defValues.length > 0)) {
+          values = defValues.clone();
+        } else {
+          values = defValues;
+        }
+      }
+    } else {
+      if((defValues != null) && (defValues.length > 0)) {
+        values = defValues.clone();
+      } else {
+        values = defValues;
+      }
+    }
+    return values;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public int getInt(String key, int defValue) {
     return settings.getInt(getHash(key), defValue);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public long getLong(String key, long defValue) {
     return settings.getLong(getHash(key), defValue);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public float getFloat(String key, float defValue) {
     return settings.getFloat(getHash(key), defValue);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean getBoolean(String key, boolean defValue) {
     return settings.getBoolean(getHash(key), defValue);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean contains(String key) {
     return settings.contains(getHash(key));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor edit() {
     getEditor();
     return this;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
     settings.registerOnSharedPreferenceChangeListener(listener);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
     settings.unregisterOnSharedPreferenceChangeListener(listener);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor putString(String key, String value) {
     return getEditor().putString(getHash(key), value);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public Editor putStringSet(String key, Set<String> values) {
     Editor editor = getEditor();
     if(Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-      putStringSet(getHash(key), values);
+      editor.putStringSet(getHash(key), values);
     } else {
       String list = Arrays.toString(values.toArray(new String[values.size()]));
       editor.putString(getHash(key), list);
@@ -416,36 +671,57 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
     return editor;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor putInt(String key, int value) {
     return getEditor().putInt(getHash(key), value);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor putLong(String key, long value) {
     return getEditor().putLong(getHash(key), value);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor putFloat(String key, float value) {
     return getEditor().putFloat(getHash(key), value);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor putBoolean(String key, boolean value) {
     return getEditor().putBoolean(getHash(key), value);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor remove(String key) {
     return getEditor().remove(getHash(key));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Editor clear() {
     return getEditor().clear();
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean commit() {
     if(editor == null) {
@@ -463,8 +739,144 @@ public abstract class BasePreferences implements SharedPreferences, SharedPrefer
     return result;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void apply() {
     commit();
+  }
+
+  /**
+   * Set an array of {@code byte} values in the preferences {@link Editor}, to be written back once
+   * {@link #commit()} is called.
+   *
+   * @param key The name of the preference to modify.
+   * @param values The array of new values for the preference. Passing {@code null} for
+   *               this argument is equivalent to calling {@link #remove(String)} with this key.
+   *
+   * @return Returns a reference to the same {@link Editor} object, so you can chain put calls
+   * together.
+   *
+   * @since Class 2.0, API 2.0.0
+   */
+  public Editor putByteArray(String key, byte[] values) {
+    Editor editor = getEditor();
+    String list = ((values != null) && (values.length > 0)) ? Arrays.toString(values) : null;
+    editor.putString(getHash(key), list);
+    return editor;
+  }
+
+  /**
+   * Set an array of {@code int} values in the preferences {@link Editor}, to be written back once
+   * {@link #commit()} is called.
+   *
+   * @param key The name of the preference to modify.
+   * @param values The array of new values for the preference. Passing {@code null} for
+   *               this argument is equivalent to calling {@link #remove(String)} with this key.
+   *
+   * @return Returns a reference to the same {@link Editor} object, so you can chain put calls
+   * together.
+   *
+   * @since Class 2.0, API 2.0.0
+   */
+  public Editor putIntArray(String key, int[] values) {
+    Editor editor = getEditor();
+    String list = ((values != null) && (values.length > 0)) ? Arrays.toString(values) : null;
+    editor.putString(getHash(key), list);
+    return editor;
+  }
+
+  /**
+   * Set an array of {@code long} values in the preferences {@link Editor}, to be written back once
+   * {@link #commit()} is called.
+   *
+   * @param key The name of the preference to modify.
+   * @param values The array of new values for the preference. Passing {@code null} for
+   *               this argument is equivalent to calling {@link #remove(String)} with this key.
+   *
+   * @return Returns a reference to the same {@link Editor} object, so you can chain put calls
+   * together.
+   *
+   * @since Class 2.0, API 2.0.0
+   */
+  public Editor putLongArray(String key, long[] values) {
+    Editor editor = getEditor();
+    String list = ((values != null) && (values.length > 0)) ? Arrays.toString(values) : null;
+    editor.putString(getHash(key), list);
+    return editor;
+  }
+
+  /**
+   * Set an array of {@code float} values in the preferences {@link Editor}, to be written back once
+   * {@link #commit()} is called.
+   *
+   * @param key The name of the preference to modify.
+   * @param values The array of new values for the preference. Passing {@code null} for
+   *               this argument is equivalent to calling {@link #remove(String)} with this key.
+   *
+   * @return Returns a reference to the same {@link Editor} object, so you can chain put calls
+   * together.
+   *
+   * @since Class 2.0, API 2.0.0
+   */
+  public Editor putFloatArray(String key, float[] values) {
+    Editor editor = getEditor();
+    String list = ((values != null) && (values.length > 0)) ? Arrays.toString(values) : null;
+    editor.putString(getHash(key), list);
+    return editor;
+  }
+
+  /**
+   * Set an array of {@code double} values in the preferences {@link Editor}, to be written back once
+   * {@link #commit()} is called.
+   *
+   * @param key The name of the preference to modify.
+   * @param values The array of new values for the preference. Passing {@code null} for
+   *               this argument is equivalent to calling {@link #remove(String)} with this key.
+   *
+   * @return Returns a reference to the same {@link Editor} object, so you can chain put calls
+   * together.
+   *
+   * @since Class 2.0, API 2.0.0
+   */
+  public Editor putDoubleArray(String key, double[] values) {
+    Editor editor = getEditor();
+    String list = ((values != null) && (values.length > 0)) ? Arrays.toString(values) : null;
+    editor.putString(getHash(key), list);
+    return editor;
+  }
+
+  /**
+   * Set an array of {@code char} values in the preferences {@link Editor}, to be written back once
+   * {@link #commit()} is called.
+   *
+   * @param key The name of the preference to modify.
+   * @param values The array of new values for the preference. Passing {@code null} for
+   *               this argument is equivalent to calling {@link #remove(String)} with this key.
+   *
+   * @return Returns a reference to the same {@link Editor} object, so you can chain put calls
+   * together.
+   *
+   * @since Class 2.0, API 2.0.0
+   */
+  public Editor putCharArray(String key, char[] values) {
+    Editor editor = getEditor();
+    String list = ((values != null) && (values.length > 0)) ? Arrays.toString(values) : null;
+    editor.putString(getHash(key), list);
+    return editor;
+  }
+
+  private TextUtils.StringSplitter getStringsSplitter(String list) {
+    TextUtils.StringSplitter splitter = null;
+    if(list != null) {
+      int len = list.length();
+      int lastIndex = len - 1;
+      if((list.charAt(0) == '[') && (list.charAt(lastIndex) == ']')) {
+        splitter = new TextUtils.SimpleStringSplitter(',');
+        splitter.setString(list.substring(1, lastIndex));
+      }
+    }
+    return splitter;
   }
 }
