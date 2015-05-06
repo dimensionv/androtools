@@ -46,7 +46,7 @@ public class LongSparseObjectArray<T> extends LongSparseArray {
     /**
      * This factory method initializes an array of {@code LongSparseObjectArray}s of the given size,
      * but doesn't add any "life" elements to the array. (meaning, the array will be initialized, but
-     * every element will be {@value null}.
+     * every element will be {@code null}.
      *
      * @param size the desired size of the array.
      *
@@ -81,7 +81,7 @@ public class LongSparseObjectArray<T> extends LongSparseArray {
     /**
      * This factory method initializes an array of {@code LongSparseObjectArray}s of the given size,
      * but doesn't add any "life" elements to the array. (meaning, the array will be initialized, but
-     * every element will be {@value null}.
+     * every element will be {@code null}.
      *
      * @param size the desired size of the array.
      *
@@ -259,13 +259,13 @@ public class LongSparseObjectArray<T> extends LongSparseArray {
   }
 
   /**
-   * Gets the {@code Object} value associated with the given {@code key}, or {@value null} if the
+   * Gets the {@code Object} value associated with the given {@code key}, or {@code null} if the
    * {@code key} does not exist in this {@code LongSparseObjectArray}.
    *
    * @param key
    *     The key / index to look up.
    *
-   * @return the value associated with {@code key} or {@value null} if {@code key} could not be
+   * @return the value associated with {@code key} or {@code null} if {@code key} could not be
    * found.
    *
    * @since Class 1.0, API 2.0.0
@@ -412,7 +412,7 @@ public class LongSparseObjectArray<T> extends LongSparseArray {
    * or not.
    *
    * @param typeClass The class to check for the {@code Parcelable} interface
-   * @return {@value true} if the {@code Parcelable} interface is implemented, {@value false} otherwise.
+   * @return {@code true} if the {@code Parcelable} interface is implemented, {@code false} otherwise.
    *
    * @since Class 1.0, API 2.0.0
    */

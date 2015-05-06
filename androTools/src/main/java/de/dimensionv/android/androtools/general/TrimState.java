@@ -30,7 +30,7 @@ public enum TrimState {
    *
    * @return the enum-object associated with the given ordinal.
    *
-   * @throws de.dimensionv.java.libraries.common.exceptions.InvalidEnumValueException
+   * @throws InvalidEnumValueException
    *     if value is not a valid value for the enum.
    *
    * @since Class 1.0, API 1.0.0

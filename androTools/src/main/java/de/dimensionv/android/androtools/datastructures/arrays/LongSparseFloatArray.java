@@ -39,7 +39,7 @@ public class LongSparseFloatArray extends LongSparseArray {
     /**
      * This factory method initializes an array of {@code LongSparseFloatArray}s of the given size,
      * but doesn't add any "life" elements to the array. (meaning, the array will be initialized, but
-     * every element will be {@value null}.
+     * every element will be {@code null}.
      *
      * @param size the desired size of the array.
      *
@@ -182,13 +182,13 @@ public class LongSparseFloatArray extends LongSparseArray {
   }
 
   /**
-   * Gets the {@code float} value associated with the given {@code key}, or {@value 0} if the
+   * Gets the {@code float} value associated with the given {@code key}, or {@code 0} if the
    * {@code key} does not exist in this {@code LongSparseFloatArray}.
    *
    * @param key
    *     The key / index to look up.
    *
-   * @return the value associated with {@code key} or {@value 0} if {@code key} could not be
+   * @return the value associated with {@code key} or {@code 0} if {@code key} could not be
    * found.
    *
    * @since Class 1.0, API 2.0.0

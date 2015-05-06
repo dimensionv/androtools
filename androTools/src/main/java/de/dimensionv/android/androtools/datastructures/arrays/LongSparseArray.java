@@ -225,7 +225,7 @@ abstract public class LongSparseArray implements Cloneable, Parcelable {
   /**
    * Convenience method to check whether this {@link LongSparseArray} is empty or not.
    *
-   * @return {@value true}, if no element has been added so far, {@value false} otherwise.
+   * @return {@code true}, if no element has been added so far, {@code false} otherwise.
    */
   public boolean isEmpty() {
     return size == 0;

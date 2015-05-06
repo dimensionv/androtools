@@ -77,7 +77,7 @@ android {
 }
 
 dependencies {
-  compile 'de.dimensionv:commonutilities:1.4.0'
+  compile 'de.dimensionv:commonutilities:2.0.0'
 }
 
 apply from: '../mavenPush.gradle'
