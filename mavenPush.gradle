@@ -10,8 +10,8 @@
 // This script is based upon several blog-posts and posts in forums and questions on stackoverflow,
 // actually too many to list all. It's the culmination of all findings while I was trying to figure
 // out how the publishing and signing stuff might actually work, if you have a multi-flavored
-// project. Because most posts were only dealing with a simple, single-flavor library, and very
-// often the solutions presented were using hardcoded references to project specifica. Since I was
+// project. Most posts were only dealing with a simple, single-flavored library, and very often the
+// solutions presented were using hardcoded references to project specifica. Since I was
 // trying to create a universal solution that in addition would not expose security credentials,
 // I had to solve way trickier problems.
 //
@@ -36,7 +36,6 @@ versionProps.load(new FileInputStream(versionPropsFile))
 def majorVersionCode = versionProps['MAJOR'].toInteger()
 def minorVersionCode = versionProps['MINOR'].toInteger()
 def hotfixVersionCode = versionProps['HOTFIX'].toInteger()
-def buildNr = versionProps['BUILD_NUMBER'].toInteger()
 ext.snapshotBuild = versionProps['SNAPSHOT_BUILD'].toBoolean()
 def versionString = String.format("%d.%d.%d", majorVersionCode, minorVersionCode, hotfixVersionCode)
 

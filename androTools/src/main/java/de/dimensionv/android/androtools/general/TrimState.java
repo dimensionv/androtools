@@ -8,6 +8,10 @@ import de.dimensionv.java.libraries.common.exceptions.InvalidEnumValueException;
  * throughout all instances of the {@code Initializer} classes of the app at the same time. Otherwise,
  * the onInitialize() should throw an {@link IllegalStateException} in order to indicate that an
  * illegal state has occurred.
+ *
+ * @author Volkmar Seifert
+ * @version 1.0
+ * @since API 1.0.0
  */
 public enum TrimState {
   NONE,
@@ -26,8 +30,10 @@ public enum TrimState {
    *
    * @return the enum-object associated with the given ordinal.
    *
-   * @throws de.dimensionv.java.libraries.common.exceptions.InvalidEnumValueException
+   * @throws InvalidEnumValueException
    *     if value is not a valid value for the enum.
+   *
+   * @since Class 1.0, API 1.0.0
    */
   public static TrimState fromOrdinal(int value) {
     try {

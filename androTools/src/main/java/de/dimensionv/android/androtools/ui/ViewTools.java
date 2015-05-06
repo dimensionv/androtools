@@ -68,6 +68,8 @@ public class ViewTools {
    *
    * @return The appropriately cast {@code View} object requested by the given {@code id}
    * or null if it could not be found within the parent {@code View} object.
+   *
+   * @since Class 1.0, API 1.0.0
    */
   @SuppressWarnings("unchecked")
   public static final <T extends View> T findView(View parent, int id) {
@@ -91,6 +93,8 @@ public class ViewTools {
    *
    * @return The appropriately cast {@code View} object requested by the given {@code id}
    * or null if it could not be found within the {@code Activity} object.
+   *
+   * @since Class 1.0, API 1.0.0
    */
   @SuppressWarnings("unchecked")
   public static final <T extends View> T findView(Activity parent, int id) {
@@ -114,6 +118,8 @@ public class ViewTools {
    *
    * @return The appropriately cast {@code View} object requested by the given {@code id}
    * or null if it could not be found within the {@code Dialog} object.
+   *
+   * @since Class 1.0, API 1.0.0
    */
   @SuppressWarnings("unchecked")
   public static final <T extends View> T findView(Dialog parent, int id) {

@@ -17,8 +17,7 @@ public class ContextTools {
   /**
    * The log-tag for logging messages.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private static final String LOGTAG = ContextTools.class.getName();
 
@@ -31,8 +30,7 @@ public class ContextTools {
    * @param context The {@code Context}-object to request the application-context from.
    * @return The application-context.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static Context getApplicationContext(Context context) {
     Context appContext = context.getApplicationContext();
@@ -45,8 +43,7 @@ public class ContextTools {
    * @param context The The {@code Context}-object to use for retrieving the application-name.
    * @return The application's name or "Unknown" if a retrieval was not possible for some reason.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static String getApplicationName(Context context) {
     Context appContext = getApplicationContext(context);

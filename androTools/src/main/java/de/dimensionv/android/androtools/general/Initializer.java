@@ -20,7 +20,7 @@ public interface Initializer {
    * @param context
    *     The {@link Context}-object, because it might be necessary for the initialization.
    * @param trimState
-   *     The current {@TrimState} of the app, which should be the same {@code TrimState} of all
+   *     The current {@link TrimState} of the app, which should be the same {@code TrimState} of all
    *     {@code Initializer}s.
    *
    * @since Interface 1.0, API 1.0.0
