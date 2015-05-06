@@ -122,8 +122,7 @@ public class ScreenTools {
    *
    * @return Returns true if the device has a big screen, false otherwise.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
   public static boolean haveBigScreen(Activity activity) {
@@ -155,8 +154,7 @@ public class ScreenTools {
    *
    * @return the {@code DisplayMetrics} of the device.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static DisplayMetrics getDisplayMetrics(Activity activity) {
     if(ScreenTools.metrics == null) {
@@ -176,8 +174,7 @@ public class ScreenTools {
    * it's landscape or Configuration.ORIENTATION_SQUARE if the orientation has equal width and
    * height, and the device has a recent enough operating-system.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
   @SuppressWarnings("deprecation")
@@ -248,8 +245,7 @@ public class ScreenTools {
    *
    * @return true if orientation is landscape, false otherwise
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static boolean orientationIsLandscape(Activity activity) {
     return getScreenOrientation(activity) == Configuration.ORIENTATION_LANDSCAPE;
@@ -263,8 +259,7 @@ public class ScreenTools {
    *
    * @return true if orientation is portrait, false otherwise
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static boolean orientationIsPortrait(Activity activity) {
     return getScreenOrientation(activity) == Configuration.ORIENTATION_PORTRAIT;

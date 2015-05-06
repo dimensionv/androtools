@@ -3,7 +3,10 @@
 ## Synopsis
 The goal of the AndroTools library is to provide recurring everyday functions that are useful in many, if not all apps.
 
-Most of the classes in this library consist of purely static methods, in order to provide fast and easy access and minimize the memory footprint. Of course it also contains classes that either require instantiation or even derivation. Especially the latter classes aim to let you focus on the real task at hand, while providing the tedious "leg work" necessary for the actualy task in the background.
+A number of the classes in this library consist of purely static methods, in order to provide fast and easy access and minimize the memory footprint. Of course it also contains classes that either require instantiation or even derivation. Especially the latter classes aim to let you focus on the real task at hand, while providing the tedious "leg work" necessary for the actual task in the background.
+
+### Important Notes about Version 2.0.0
+In version 2.0.0, I have removed a few classes that required the support-libraries. I extracted them into a separate library. This library does not require the use of the support-libraries any longer. However, if you decide to make use of them, this will not be a problem either, because AndroTools is completely independent of the support-library and the classes within it.
 
 ## License
 As usual with my libraries, the AndroTools library is published under a simplified 2-clause BSD license.

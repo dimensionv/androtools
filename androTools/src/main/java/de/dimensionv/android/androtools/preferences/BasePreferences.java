@@ -41,6 +41,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.text.TextUtils;
 
@@ -59,7 +60,7 @@ import de.dimensionv.java.libraries.common.utilities.strings.StringUtils;
 
 /**
  * <p>Base-class for {@link SharedPreferences} handling.</p> <p>This base-class implements the
- * {@code SharedPreferences} and {@link SharedPreferences.Editor} interfaces directly for a more
+ * {@code SharedPreferences} and {@link Editor} interfaces directly for a more
  * convenient access and easier handling.</p> <p>Since this class is using caching mechanisms for
  * certain aspects, it also implements the {@link MemoryTrimmer} interface. In order to be properly
  * available after a trim memory event, the {@link Initializer} interface is implemented as well,
@@ -79,7 +80,7 @@ import de.dimensionv.java.libraries.common.utilities.strings.StringUtils;
  */
 @SuppressWarnings("UnusedDeclaration")
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public abstract class BasePreferences implements SharedPreferences, SharedPreferences.Editor, Initializer, MemoryTrimmer {
+public abstract class BasePreferences implements SharedPreferences, Editor, Initializer, MemoryTrimmer {
 
   /**
    * The actual {@link SharedPreferences} object that is used internally.

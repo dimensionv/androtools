@@ -46,22 +46,19 @@ public class FileTools extends FileUtils {
   /**
    * TAG for log messages.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private static final String TAG = FileTools.class.getName();
   /**
    * Flag whether debug-message shall be assembled and written or not.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private static final boolean DEBUG = false; // Set to true to enable logging
   /**
    * Path to the app's local cache-directory
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   private static String cachePath = null;
   private static String extCachePath = null;
@@ -81,8 +78,7 @@ public class FileTools extends FileUtils {
    * @return {@code true} if {@code Uri}-object is a media URI, {@code false}
    * otherwise.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static boolean isMediaUri(Uri uri) {
     String uriString = uri.toString();
@@ -106,8 +102,7 @@ public class FileTools extends FileUtils {
    * @return {@code true} if the file denoted by the {@code Uri}-object has
    * thumbnail-support through Android's Media-framework.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static boolean hasThumbnailSupport(Uri uri) {
     String uriString = uri.toString();
@@ -125,8 +120,7 @@ public class FileTools extends FileUtils {
    *
    * @return the new  {@code Uri}-object.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static Uri getUri(File file) {
     return Uri.fromFile(file);
@@ -140,8 +134,7 @@ public class FileTools extends FileUtils {
    *
    * @return The new {@code File}-object.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static File getFile(Context context, Uri uri) {
     return new File(getPath(context, uri));
@@ -164,8 +157,7 @@ public class FileTools extends FileUtils {
    *     Thrown if the {@code Uri} object does not contain a valid file-path or the
    *     {@code ContentProvider} query fails.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static String getPath(Context context, Uri uri) {
     String path = null;
@@ -185,7 +177,7 @@ public class FileTools extends FileUtils {
     String scheme = uri.getScheme().toLowerCase(Locale.US); // a scheme must be in US-ASCII
     if("content".equals(scheme)) {
       String[] projection = {"_data"};
-      Cursor cursor;
+      Cursor cursor = null;
 
       try {
         cursor = context.getContentResolver().query(uri, projection, null, null, null);
@@ -195,6 +187,10 @@ public class FileTools extends FileUtils {
         }
       } catch(Exception ex) {
         throw new InvalidValueException(uri, ex);
+      } finally {
+        if(cursor != null) {
+          cursor.close();
+        }
       }
     } else if("file".equals(scheme)) {
       path = uri.getPath();
@@ -228,8 +224,7 @@ public class FileTools extends FileUtils {
    * @return The path to the cache-directory. Can be null if {@code external} is
    * {@code true} and the external storage is not available.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   @TargetApi(Build.VERSION_CODES.GINGERBREAD)
   public static String getApplicationCachePath(Context context, boolean external) {
@@ -270,8 +265,7 @@ public class FileTools extends FileUtils {
    * @return The path to the cache-directory. Will not be null, because if there is no external
    * storage, the internal storage will be returned.
    *
-   * @since Class 1.0
-   * @since API 1.0.0
+   * @since Class 1.0, API 1.0.0
    */
   public static String getApplicationCachePath(Context context) {
     String path = getApplicationCachePath(context, true);
