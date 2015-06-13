@@ -680,7 +680,7 @@ public final class ArraySizeTools {
    * @since Class 1.0, API 2.0.0
    */
   public static int calculateNewSize(int currentSize) {
-    return currentSize <= 4 ? 8 : currentSize << 2;
+    return currentSize <= 4 ? 8 : currentSize << 1;
   }
 
   /**
@@ -847,7 +847,7 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the byte-array.
    */
   public static int optimalByteArraySize(int desiredSize) {
-    // calculate optimal byte aligment
+    // calculate optimal byte aligment for a 32 bit system
     for(int i = 4; i < 32; i++) {
       if(desiredSize <= (1 << i) - 12) {
         return (1 << i) - 12;
@@ -878,7 +878,7 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the char-array.
    */
   public static int optimalCharArraySize(int desiredSize) {
-    return optimalByteArraySize(desiredSize * 2) / 2;
+    return optimalByteArraySize(desiredSize << 1) >>> 1;
   }
 
   /**
@@ -890,7 +890,7 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the int-array.
    */
   public static int optimalIntArraySize(int desiredSize) {
-    return optimalByteArraySize(desiredSize * 4) / 4;
+    return optimalByteArraySize(desiredSize << 2) >>> 2;
   }
 
   /**
@@ -902,7 +902,7 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the float-array.
    */
   public static int optimalFloatArraySize(int desiredSize) {
-    return optimalByteArraySize(desiredSize * 4) / 4;
+    return optimalByteArraySize(desiredSize << 2) >>> 2;
   }
 
   /**
@@ -914,7 +914,7 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the float-array.
    */
   public static int optimalDoubleArraySize(int desiredSize) {
-    return optimalByteArraySize(desiredSize * 8) / 8;
+    return optimalByteArraySize(desiredSize << 3) >>> 3;
   }
 
   /**
@@ -926,7 +926,7 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the object-array.
    */
   public static int optimalObjectArraySize(int desiredSize) {
-    return optimalByteArraySize(desiredSize * 4) / 4;
+    return optimalByteArraySize(desiredSize << 2) >>> 2;
   }
 
   /**
@@ -938,6 +938,6 @@ public final class ArraySizeTools {
    * @return the actual optimal size for the long-array.
    */
   public static int optimalLongArraySize(int desiredSize) {
-    return optimalByteArraySize(desiredSize * 8) / 8;
+    return optimalByteArraySize(desiredSize << 3) >>> 3;
   }
 }
